@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using UKParliament.CodeTest.Data;
 using UKParliament.CodeTest.Services;
@@ -16,7 +17,11 @@ public class Program
 
         builder.Services.AddDbContext<PersonManagerContext>(op => op.UseInMemoryDatabase("PersonManager"));
 
+        builder.Services.AddScoped<DbContext>(provider => provider.GetRequiredService<PersonManagerContext>());
+
         builder.Services.AddScoped<IPersonService, PersonService>();
+
+        builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 
         var app = builder.Build();
 
