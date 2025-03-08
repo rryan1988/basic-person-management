@@ -2,10 +2,9 @@
 
 public class PersonViewModel
 {
-    public string FirstName { get; set; }
-    public string LastName { get; set; }
-    public int Id { get; internal set; }
-    public object Age { get; internal set; }
-    public string Email { get; internal set; }
-    public string Department { get; internal set; }
+    public int? Id { get; set; }
+    public string FirstName { get; set; } = null!;
+    public string LastName { get; set; } = null!;
+    public string Email { get; set; } = null!;
+    public string Department { get; set; } = null!;
 }

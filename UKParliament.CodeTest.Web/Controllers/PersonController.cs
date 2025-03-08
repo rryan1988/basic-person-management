@@ -1,8 +1,11 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using UKParliament.CodeTest.Data;
+using UKParliament.CodeTest.Web.Mediator.CreatePerson;
 using UKParliament.CodeTest.Web.Mediator.GetPeople;
 using UKParliament.CodeTest.Web.Mediator.GetPeopleByDepartment;
 using UKParliament.CodeTest.Web.Mediator.GetPerson;
+using UKParliament.CodeTest.Web.Mediator.UpdatePerson;
 using UKParliament.CodeTest.Web.ViewModels;
 
 namespace UKParliament.CodeTest.Web.Controllers;
@@ -58,5 +61,32 @@ public class PersonController : ControllerBase
         }
 
         return Ok(response.People);
+    }
+
+    [HttpPost]
+    public async Task<ActionResult> Create([FromBody] PersonViewModel personViewModel)
+    {
+        CreatePersonCommand command= new CreatePersonCommand { NewPerson = personViewModel };
+        var response = await _mediator.Send(command);
+        if (response.HasErrors())
+        {
+            return BadRequest(response.ValidationMessage!.Errors);
+        }
+        personViewModel.Id = response.Id!.Value;
+        return CreatedAtAction(nameof(GetById), new { id = response.Id }, personViewModel);
+    }
+
+    [HttpPut]
+    public async Task<ActionResult> Update([FromBody] PersonViewModel personViewModel)
+    {
+        UpdatePersonCommand command = new UpdatePersonCommand { UpdatedPerson = personViewModel };
+        var response = await _mediator.Send(command);
+
+        if (response.HasErrors())
+        {
+            return BadRequest(response.ValidationMessage!.Errors);
+        }
+
+        return NoContent();
     }
 }

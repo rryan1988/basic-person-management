@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using UKParliament.CodeTest.Web.Constants;
 
 namespace UKParliament.CodeTest.Web.Mediator.GetPeopleByDepartment
 {
@@ -6,8 +7,8 @@ namespace UKParliament.CodeTest.Web.Mediator.GetPeopleByDepartment
     {
         public GetPeopleByDepartmentRequestValidator()
         {
-            RuleFor(x => x.Department).NotEmpty().WithMessage("Department name cannot be empty");
-            RuleFor(x => x.Department).NotNull().WithMessage("Department name cannot be null");
+            RuleFor(x => x.Department).NotEmpty().WithMessage(ValidationConstants.InvalidDepartment);
+            RuleFor(x => x.Department).NotNull().WithMessage(ValidationConstants.DepartmentNull);
         }
     }
 }
