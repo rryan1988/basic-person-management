@@ -1,0 +1,29 @@
+<div>
+  <h2>Create Person</h2>
+  <form (ngSubmit)="onAdd()">
+    <div>
+      <label for="firstName">First Name:</label>
+      <input type="text" id="firstName" [(ngModel)]="newPerson.firstName" name="firstName" required>
+    </div>
+    <div>
+      <label for="lastName">Last Name:</label>
+      <input type="text" id="lastName" [(ngModel)]="newPerson.lastName" name="lastName" required>
+    </div>
+    <div>
+      <label for="email">Email:</label>
+      <input type="email" id="email" [(ngModel)]="newPerson.email" name="email" required>
+    </div>
+    <div>
+      <label for="department">Department:</label>
+      <select id="department" [(ngModel)]="newPerson.department" name="department" required>
+        <option *ngFor="let dept of departments" [value]="dept.name">{{ dept.name }}</option>
+      </select>
+    </div>
+    <div>
+      <button type="submit">Save</button>
+    </div>
+  </form>
+  <div *ngIf="errorMessage" class="error">
+    {{ errorMessage }}
+  </div>
+</div>

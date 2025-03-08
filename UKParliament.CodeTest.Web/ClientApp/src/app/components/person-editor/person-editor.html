@@ -1,0 +1,24 @@
+<div *ngIf="person">
+  <h2>Edit Person</h2>
+  <form (ngSubmit)="onSave()">
+    <div>
+      <label for="firstName">First Name:</label>
+      <input type="text" id="firstName" [(ngModel)]="person.firstName" name="firstName" required>
+    </div>
+    <div>
+      <label for="lastName">Last Name:</label>
+      <input type="text" id="lastName" [(ngModel)]="person.lastName" name="lastName" required>
+    </div>
+    <div>
+      <label for="email">Email:</label>
+      <input type="email" id="email" [(ngModel)]="person.email" name="email" required>
+    </div>
+    <div>
+      <label for="department">Department:</label>
+      <input type="text" id="department" [(ngModel)]="person.department" name="department" required>
+    </div>
+    <div>
+      <button type="submit">Save</button>
+    </div>
+  </form>
+</div>
