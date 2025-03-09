@@ -1,9 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using UKParliament.CodeTest.Data;
 using UKParliament.CodeTest.Web.Mediator.CreatePerson;
+using UKParliament.CodeTest.Web.Mediator.GetDepartments;
 using UKParliament.CodeTest.Web.Mediator.GetPeople;
-using UKParliament.CodeTest.Web.Mediator.GetPeopleByDepartment;
 using UKParliament.CodeTest.Web.Mediator.GetPerson;
 using UKParliament.CodeTest.Web.Mediator.UpdatePerson;
 using UKParliament.CodeTest.Web.ViewModels;
@@ -49,20 +48,6 @@ public class PersonController : ControllerBase
         return Ok(response.Person);
     }
 
-    [Route("department/{department:string}")]
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<PersonViewModel>>> GetByDepartment(string department)
-    {
-        var request = new GetPeopleByDepartmentRequest { Department = department };
-        var response = await _mediator.Send(request);
-        if (response.HasErrors())
-        {
-            return BadRequest(response.ValidationMessage!.Errors);
-        }
-
-        return Ok(response.People);
-    }
-
     [HttpPost]
     public async Task<ActionResult> Create([FromBody] PersonViewModel personViewModel)
     {
@@ -88,5 +73,22 @@ public class PersonController : ControllerBase
         }
 
         return NoContent();
+    }
+
+    [Route("departments")]
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<DepartmentViewModel>>> GetDepartments()
+    {
+        try
+        {
+            var request = new GetDepartmentsRequest();
+            var response = await _mediator.Send(request);
+            return Ok(response.Departments);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred while getting departments.");
+            return StatusCode(500, "An error occurred while getting departments.");
+        }
     }
 }

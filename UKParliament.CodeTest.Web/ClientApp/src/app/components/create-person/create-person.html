@@ -1,29 +1,33 @@
-<div>
+<div class="container mt-4">
   <h2>Create Person</h2>
   <form (ngSubmit)="onAdd()">
-    <div>
-      <label for="firstName">First Name:</label>
-      <input type="text" id="firstName" [(ngModel)]="newPerson.firstName" name="firstName" required>
+    <div class="mb-3">
+      <label for="firstName" class="form-label">First Name:</label>
+      <input type="text" id="firstName" [(ngModel)]="newPerson.firstName" name="firstName" class="form-control" required>
     </div>
-    <div>
-      <label for="lastName">Last Name:</label>
-      <input type="text" id="lastName" [(ngModel)]="newPerson.lastName" name="lastName" required>
+    <div class="mb-3">
+      <label for="lastName" class="form-label">Last Name:</label>
+      <input type="text" id="lastName" [(ngModel)]="newPerson.lastName" name="lastName" class="form-control" required>
     </div>
-    <div>
-      <label for="email">Email:</label>
-      <input type="email" id="email" [(ngModel)]="newPerson.email" name="email" required>
+    <div class="mb-3">
+      <label for="email" class="form-label">Email:</label>
+      <input type="email" id="email" [(ngModel)]="newPerson.email" name="email" class="form-control" required>
     </div>
-    <div>
-      <label for="department">Department:</label>
-      <select id="department" [(ngModel)]="newPerson.department" name="department" required>
-        <option *ngFor="let dept of departments" [value]="dept.name">{{ dept.name }}</option>
+    <div class="mb-3">
+      <label for="department" class="form-label">Department:</label>
+      <select id="department" [(ngModel)]="newPerson.department" name="department" class="form-select" required>
+        <option *ngFor="let dept of departments$ | async" [value]="dept.name">{{ dept.name }}</option>
       </select>
     </div>
+    <div class="mb-3">
+      <label for="dateOfBirth" class="form-label">Date of Birth:</label>
+      <input type="date" id="dateOfBirth" [(ngModel)]="newPerson.dateOfBirth" name="dateOfBirth" class="form-control" required>
+    </div>
     <div>
-      <button type="submit">Save</button>
+      <button type="submit" class="btn btn-primary">Save</button>
     </div>
   </form>
-  <div *ngIf="errorMessage" class="error">
+  <div *ngIf="errorMessage" class="alert alert-danger mt-3">
     {{ errorMessage }}
   </div>
 </div>

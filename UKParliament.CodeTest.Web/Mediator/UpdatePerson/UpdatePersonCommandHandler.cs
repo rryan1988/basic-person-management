@@ -17,10 +17,10 @@ namespace UKParliament.CodeTest.Web.Mediator.UpdatePerson
         {
             try
             {
-                var person = await _personService.GetPerson(request.Person.Id);
+                var person = await _personService.GetPerson((int)request.UpdatedPerson.Id!);
                 if (person == null)
                 {
-                    _logger.LogWarning("Person with ID {PersonId} not found.", request.Person.Id);
+                    _logger.LogWarning("Person with ID {PersonId} not found.", request.UpdatedPerson.Id);
                     return new UpdatePersonResponse
                     {
                         ValidationMessage = new ValidationResult(new List<ValidationFailure>
@@ -30,22 +30,19 @@ namespace UKParliament.CodeTest.Web.Mediator.UpdatePerson
                     };
                 }
 
-                person.FirstName = request.Person.FirstName;
-                person.LastName = request.Person.LastName;
-                person.Email = request.Person.Email;
-                person.Department = request.Person.Department;
-                person.DateOfBirth = request.Person.DateOfBirth;
+                person.FirstName = request.UpdatedPerson.FirstName;
+                person.LastName = request.UpdatedPerson.LastName;
+                person.Email = request.UpdatedPerson.Email;
+                person.Department = request.UpdatedPerson.Department;
+                person.DateOfBirth = request.UpdatedPerson.DateOfBirth;
 
                 await _personService.UpdatePerson(person);
 
-                return new UpdatePersonResponse
-                {
-                    Id = person.Id
-                };
+                return new UpdatePersonResponse();
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while updating the person with ID {PersonId}.", request.Person.Id);
+                _logger.LogError(ex, "An error occurred while updating the person with ID {PersonId}.", request.UpdatedPerson.Id);
                 throw;
             }
         }

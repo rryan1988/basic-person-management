@@ -9,7 +9,6 @@ using UKParliament.CodeTest.Services;
 using UKParliament.CodeTest.Web.Controllers;
 using UKParliament.CodeTest.Web.Mediator.CreatePerson;
 using UKParliament.CodeTest.Web.Mediator.GetPeople;
-using UKParliament.CodeTest.Web.Mediator.GetPeopleByDepartment;
 using UKParliament.CodeTest.Web.Mediator.GetPerson;
 using UKParliament.CodeTest.Web.Mediator.UpdatePerson;
 using UKParliament.CodeTest.Web.ViewModels;
@@ -73,43 +72,6 @@ namespace UKParliament.CodeTest.Web.Tests.Controllers
 
             // Act
             var result = await controller.GetById(1);
-
-            // Assert
-            Assert.IsType<NotFoundResult>(result.Result);
-        }
-
-        [Theory]
-        [AutoData]
-        public async Task GetByDepartment_ReturnsOkResult_WithListOfPeople(
-            [Frozen] Mock<IMediator> mediator,
-            List<PersonViewModel> people,
-            PersonController controller)
-        {
-            // Arrange
-            mediator.Setup(m => m.Send(It.IsAny<GetPeopleByDepartmentRequest>(), It.IsAny<CancellationToken>()))
-                    .ReturnsAsync(new GetPeopleByDepartmentResponse { People = people });
-
-            // Act
-            var result = await controller.GetByDepartment("IT");
-
-            // Assert
-            var okResult = Assert.IsType<OkObjectResult>(result.Result);
-            var returnValue = Assert.IsType<List<PersonViewModel>>(okResult.Value);
-            Assert.Equal(people.Count, returnValue.Count);
-        }
-
-        [Theory]
-        [AutoData]
-        public async Task GetByDepartment_ReturnsNotFound_WhenNoPeopleFound(
-            [Frozen] Mock<IMediator> mediator,
-            PersonController controller)
-        {
-            // Arrange
-            mediator.Setup(m => m.Send(It.IsAny<GetPeopleByDepartmentRequest>(), It.IsAny<CancellationToken>()))
-                    .ReturnsAsync(new GetPeopleByDepartmentResponse { People = null });
-
-            // Act
-            var result = await controller.GetByDepartment("IT");
 
             // Assert
             Assert.IsType<NotFoundResult>(result.Result);

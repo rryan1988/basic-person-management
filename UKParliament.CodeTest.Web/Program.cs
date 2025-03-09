@@ -21,6 +21,8 @@ public class Program
 
         builder.Services.AddScoped<IPersonService, PersonService>();
 
+        builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+
         builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 
         var app = builder.Build();

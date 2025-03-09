@@ -10,7 +10,7 @@ export class DepartmentService {
   private readonly apiUrl: string;
 
   constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
-    this.apiUrl = `${baseUrl}api/department`;
+    this.apiUrl = `${baseUrl}api/departments`;
   }
 
   getDepartments(): Observable<DepartmentViewModel[]> {

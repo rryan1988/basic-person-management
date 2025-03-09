@@ -18,7 +18,7 @@ export const initialState: AppState = {
   departmentErrors: []
 };
 
-export const personReducer = createReducer(
+export const appReducer = createReducer(
   initialState,
   on(PersonActions.loadPeopleSuccess, (state, { people }) => ({ ...state, people })),
   on(PersonActions.loadPeopleFailure, (state, { error }) => ({ ...state, error })),
@@ -28,10 +28,7 @@ export const personReducer = createReducer(
     ...state,
     people: state.people.map(p => p.id === person.id ? person : p)
   })),
-  on(PersonActions.updatePersonFailure, (state, { error }) => ({ ...state, error }))
-);
-export const departmentReducer = createReducer(
-  initialState,
+  on(PersonActions.updatePersonFailure, (state, { error }) => ({ ...state, error })),
   on(DepartmentActions.loadDepartmentsSuccess, (state, { departments }) => ({ ...state, departments })),
   on(DepartmentActions.loadDepartmentsFailure, (state, { error }) => ({ ...state, error }))
 );

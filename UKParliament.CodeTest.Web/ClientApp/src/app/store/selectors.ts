@@ -1,7 +1,7 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { AppState } from './reducers';
 
-export const selectAppState = createFeatureSelector<AppState>('person-management');
+export const selectAppState = createFeatureSelector<AppState>('appState');
 
 export const selectAllPeople = createSelector(
   selectAppState,

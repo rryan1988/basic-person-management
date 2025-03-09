@@ -13,7 +13,7 @@ export class DepartmentEffects {
           ofType(DepartmentActions.loadDepartments),
           mergeMap(() =>
             this.departmentService.getDepartments().pipe(
-              map(deparments => DepartmentActions.loadDepartmentsSuccess({ deparments })),
+              map(departments => DepartmentActions.loadDepartmentsSuccess({ departments })),
               catchError(error => of(DepartmentActions.loadDepartmentsFailure({ error })))
             )
           )
