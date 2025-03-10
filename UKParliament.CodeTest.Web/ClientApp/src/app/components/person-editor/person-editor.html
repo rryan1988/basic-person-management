@@ -1,4 +1,5 @@
 <div *ngIf="editedPerson" class="container mt-4">
+  <button type="button" (click)="closeEditor()" class="btn btn-secondary">Close</button>
   <h2>Edit Person</h2>
   <form (ngSubmit)="onSave()">
     <div class="mb-3">
@@ -21,7 +22,7 @@
     </div>
     <div class="mb-3">
       <label for="dateOfBirth" class="form-label">Date of Birth:</label>
-      <input type="date" id="dateOfBirth" [(ngModel)]="editedPerson.dateOfBirth" name="dateOfBirth" class="form-control" required>
+      <input type="date" id="dateOfBirth" [(ngModel)]="formattedDate" name="dateOfBirth" class="form-control" required>
     </div>
     <div>
       <button type="submit" class="btn btn-primary">Save</button>

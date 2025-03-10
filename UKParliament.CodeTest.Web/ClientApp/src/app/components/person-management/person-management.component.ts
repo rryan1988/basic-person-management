@@ -18,6 +18,7 @@ export class PersonManagementComponent implements OnInit {
   departments$: Observable<DepartmentViewModel[]>;
   error$: Observable<any>;
   selectedPerson: PersonViewModel | null = null;
+  showCreatePersonComponent = false;
 
   constructor(private store: Store) {
     this.departments$ = this.store.select(selectAllDepartments);
@@ -31,6 +32,7 @@ export class PersonManagementComponent implements OnInit {
   }
 
   onPersonSelected(person: PersonViewModel): void {
+    this.showCreatePersonComponent = false; // Hide the create person component
     this.selectedPerson = person;
   }
 
@@ -41,5 +43,18 @@ export class PersonManagementComponent implements OnInit {
 
   onAddPerson(person: PersonViewModel): void {
     this.store.dispatch(createPerson({ person }));
+  }
+
+  showCreatePerson(): void {
+    this.selectedPerson = null; // Deselect any selected person
+    this.showCreatePersonComponent = true; // Show create person component
+  }
+
+  closeEditor(): void {
+    this.selectedPerson = null; // Close the person editor
+  }
+
+  closeCreatePerson(): void {
+    this.showCreatePersonComponent = false; // Close the create person component
   }
 }

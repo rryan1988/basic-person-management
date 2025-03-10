@@ -1,5 +1,6 @@
 <div>
     <h2>Person List</h2>
+    <button (click)="createPerson()" class="btn btn-primary mt-3">Create New Person</button>
     <ul>
       <li *ngFor="let person of people$ | async" (click)="selectPerson(person)">
         <strong>{{ person.firstName }} {{ person.lastName }}</strong><br>

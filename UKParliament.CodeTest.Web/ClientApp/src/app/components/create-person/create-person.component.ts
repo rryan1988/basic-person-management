@@ -1,7 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { PersonViewModel } from '../../models/person-view-model';
 import { DepartmentViewModel } from '../../models/department-view-model';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { selectAllDepartments } from 'src/app/store/selectors';
 import { Store } from '@ngrx/store';
 
@@ -16,26 +16,20 @@ export class CreatePersonComponent {
   departments: DepartmentViewModel[] = [];
   errorMessage: string | null = null;
   @Output() addPerson = new EventEmitter<PersonViewModel>();
+  @Output() closeCreatePersonEvent = new EventEmitter<void>();
    departments$: Observable<DepartmentViewModel[]>;
-   private subscription: Subscription;
 
   constructor(private store: Store) {
     this.departments$ = this.store.select(selectAllDepartments);
-    this.subscription = this.departments$.subscribe(departments => {
-      //this.departments = departments;
-      console.log('Departments:', departments);
-    });
-  }
-
-  ngOnDestroy(): void {
-    // Unsubscribe to prevent memory leaks
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
   }
 
   onAdd(): void {
+    console.log("saving new person", this.newPerson);
     this.addPerson.emit(this.newPerson);
     this.newPerson = { firstName: '', lastName: '', email: '', department: '', dateOfBirth: new Date() }; // Reset form
+  }
+
+  closeCreatePerson(): void {
+    this.closeCreatePersonEvent.emit();
   }
 }

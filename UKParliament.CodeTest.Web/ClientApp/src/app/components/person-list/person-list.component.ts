@@ -14,6 +14,7 @@ import { Store } from '@ngrx/store';
 export class PersonListComponent {
   people$: Observable<PersonViewModel[]>;
   @Output() personSelected = new EventEmitter<PersonViewModel>();
+  @Output() showCreatePerson = new EventEmitter<void>();
 
   constructor(private store: Store) {
     this.people$ = this.store.select(selectAllPeople);
@@ -21,5 +22,9 @@ export class PersonListComponent {
 
   selectPerson(person: PersonViewModel): void {
     this.personSelected.emit(person);
+  }
+
+  createPerson(): void {
+    this.showCreatePerson.emit();
   }
 }
