@@ -58,7 +58,7 @@ public class PersonController : ControllerBase
             return BadRequest(response.ValidationMessage!.Errors);
         }
         personViewModel.Id = response.Id!.Value;
-        return CreatedAtAction(nameof(GetById), new { id = response.Id }, personViewModel);
+        return Ok(personViewModel);
     }
 
     [HttpPut]

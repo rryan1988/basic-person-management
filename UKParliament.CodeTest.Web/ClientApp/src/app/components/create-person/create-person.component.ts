@@ -20,12 +20,18 @@ export class CreatePersonComponent {
    private subscription: Subscription;
 
   constructor(private store: Store) {
-    console.log("Selecting Departments v2");
     this.departments$ = this.store.select(selectAllDepartments);
     this.subscription = this.departments$.subscribe(departments => {
-      this.departments = departments;
+      //this.departments = departments;
       console.log('Departments:', departments);
     });
+  }
+
+  ngOnDestroy(): void {
+    // Unsubscribe to prevent memory leaks
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 
   onAdd(): void {

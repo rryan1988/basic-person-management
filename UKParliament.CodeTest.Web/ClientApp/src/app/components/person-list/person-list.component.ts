@@ -11,16 +11,12 @@ import { Store } from '@ngrx/store';
   styleUrls: ['./person-list.scss'],
   standalone: false
 })
-export class PersonListComponent implements OnInit {
+export class PersonListComponent {
   people$: Observable<PersonViewModel[]>;
   @Output() personSelected = new EventEmitter<PersonViewModel>();
 
   constructor(private store: Store) {
     this.people$ = this.store.select(selectAllPeople);
-  }
-
-  ngOnInit(): void {
-    // No need to load people here, it will be loaded in PersonManagementComponent
   }
 
   selectPerson(person: PersonViewModel): void {

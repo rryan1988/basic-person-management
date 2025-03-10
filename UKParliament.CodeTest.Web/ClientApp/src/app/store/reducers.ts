@@ -7,8 +7,8 @@ import { DepartmentViewModel } from '../models/department-view-model';
 export interface AppState {
   people: PersonViewModel[];
   departments: DepartmentViewModel[];
-  personErrors: [];
-  departmentErrors: [];
+  personErrors: any[];
+  departmentErrors: any[];
 }
 
 export const initialState: AppState = {
@@ -22,13 +22,30 @@ export const appReducer = createReducer(
   initialState,
   on(PersonActions.loadPeopleSuccess, (state, { people }) => ({ ...state, people })),
   on(PersonActions.loadPeopleFailure, (state, { error }) => ({ ...state, error })),
-  on(PersonActions.createPersonSuccess, (state, { person }) => ({ ...state, people: [...state.people, person] })),
-  on(PersonActions.createPersonFailure, (state, { error }) => ({ ...state, error })),
-  on(PersonActions.updatePersonSuccess, (state, { person }) => ({
+  on(PersonActions.createPersonSuccess, (state, { person }) => (
+    console.log("Person Created Successfully", person),{
     ...state,
-    people: state.people.map(p => p.id === person.id ? person : p)
+    people: [...state.people, person]
   })),
-  on(PersonActions.updatePersonFailure, (state, { error }) => ({ ...state, error })),
+  on(PersonActions.createPersonFailure, (state, { error }) => (
+    console.log("Person Creation Failed", error),{
+    ...state,
+    error
+  })),
+  on(PersonActions.updatePersonSuccess, (state, { person }) => {
+    console.log('Person Updated Successfully', person);
+    return {
+      ...state,
+      people: state.people.map(p => p.id === person.id ? person : p)
+    };
+  }),
+  on(PersonActions.updatePersonFailure, (state, { error }) => {
+    console.log('Person Update Failed', error);
+    return {
+      ...state,
+      personErrors: [...state.personErrors, error]
+    };
+  }),
   on(DepartmentActions.loadDepartmentsSuccess, (state, { departments }) => ({ ...state, departments })),
   on(DepartmentActions.loadDepartmentsFailure, (state, { error }) => ({ ...state, error }))
 );

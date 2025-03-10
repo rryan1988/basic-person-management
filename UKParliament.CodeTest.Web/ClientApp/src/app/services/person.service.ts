@@ -26,27 +26,20 @@ export class PersonService {
     );
   }
 
-  getByDepartment(department: string): Observable<PersonViewModel[]> {
-    return this.http.get<PersonViewModel[]>(`${this.apiUrl}/department/${department}`).pipe(
-      catchError(this.handleError)
-    );
-  }
-
   createPerson(person: PersonViewModel): Observable<PersonViewModel> {
-    return this.http.post<number>(this.apiUrl, person).pipe(
-      switchMap(id => this.getById(id)),
+    return this.http.post<PersonViewModel>(this.apiUrl, person).pipe(
       catchError(this.handleError)
     );
   }
 
   updatePerson(person: PersonViewModel): Observable<void> {
-    return this.http.put<void>(`${this.apiUrl}/${person.id}`, person).pipe(
+    return this.http.put<void>(this.apiUrl, person).pipe(
       catchError(this.handleError)
     );
   }
 
   private handleError(error: any): Observable<never> {
-    console.error('An error occurred:', error);
-    return throwError(() => new Error(error));
+    console.error('An error occurred:', JSON.parse(error));
+    return throwError(() => new Error(error.message || 'Server error'));
   }
 }

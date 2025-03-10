@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { PersonViewModel } from '../../models/person-view-model';
 import { selectAllDepartments } from 'src/app/store/selectors';
 import { Observable } from 'rxjs';
@@ -11,18 +11,26 @@ import { Store } from '@ngrx/store';
   styleUrls: ['./person-editor.scss'],
   standalone: false
 })
-export class PersonEditorComponent {
+export class PersonEditorComponent implements OnInit {
   @Input() person: PersonViewModel | null = null;
   @Output() savePerson = new EventEmitter<PersonViewModel>();
   departments$: Observable<DepartmentViewModel[]>;
+  editedPerson: PersonViewModel | null = null;
 
   constructor(private store: Store) {
     this.departments$ = this.store.select(selectAllDepartments);
   }
 
-  onSave(): void {
+  ngOnInit(): void {
     if (this.person) {
-      this.savePerson.emit(this.person);
+      // Clone the person object
+      this.editedPerson = { ...this.person };
+    }
+  }
+
+  onSave(): void {
+    if (this.editedPerson) {
+      this.savePerson.emit(this.editedPerson);
     }
   }
 }
