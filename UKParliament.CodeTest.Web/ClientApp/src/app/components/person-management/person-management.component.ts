@@ -51,6 +51,7 @@ export class PersonManagementComponent implements OnInit {
   }
 
   closeEditor(): void {
+    this.selectedPerson = null; // Deselect the selected person in the list
     this.selectedPerson = null; // Close the person editor
   }
 

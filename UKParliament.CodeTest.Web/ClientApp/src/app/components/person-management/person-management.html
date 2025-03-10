@@ -1,9 +1,17 @@
 <div class="container-fluid mt-4">
+  <!-- Header -->
+  <header class="bg-primary text-white py-3 mb-4">
+    <div class="container">
+      <h1 class="mb-0 text-white">Person Management</h1>
+    </div>
+  </header>
+
   <div class="row">
     <!-- Person List (1/3 width) -->
     <div class="col-md-4">
       <person-list (personSelected)="onPersonSelected($event)"
-      (showCreatePerson)="showCreatePerson()"></person-list>
+      (showCreatePerson)="showCreatePerson()"
+      [selectedPerson]="selectedPerson"></person-list>
     </div>
     <!-- Editor/Creator (2/3 width) -->
     <div class="col-md-8">

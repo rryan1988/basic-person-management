@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { APP_ID, NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
@@ -19,6 +19,7 @@ import { DepartmentEffects } from './store/effects/department.effects';
 import { RouterModule } from '@angular/router';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { AppStateModule } from './store/app.state.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
 @NgModule({
@@ -32,6 +33,8 @@ import { AppStateModule } from './store/app.state.module';
     ],
     imports: [
       BrowserModule,
+      ReactiveFormsModule,
+      BrowserAnimationsModule,
       FormsModule,
       BsDatepickerModule.forRoot(),
       AppStateModule,

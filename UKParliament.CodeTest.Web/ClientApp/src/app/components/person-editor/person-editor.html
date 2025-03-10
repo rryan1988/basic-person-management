@@ -1,31 +1,66 @@
-<div *ngIf="editedPerson" class="container mt-4">
-  <button type="button" (click)="closeEditor()" class="btn btn-secondary">Close</button>
-  <h2>Edit Person</h2>
-  <form (ngSubmit)="onSave()">
-    <div class="mb-3">
-      <label for="firstName" class="form-label">First Name:</label>
-      <input type="text" id="firstName" [(ngModel)]="editedPerson.firstName" name="firstName" class="form-control" required>
+<div *ngIf="editedPerson" class="container mt-4" @fadeInOut>
+  <div class="card">
+    <div class="card-header bg-primary text-white">
+      <div class="row">
+        <div class="col-10">
+          <h2 class="text-white" id="editPersonHeading">Edit {{editedPerson.firstName}} {{editedPerson.lastName}}</h2>
+        </div>
+        <div class="col-2">
+          <button type="button" (click)="closeEditor()" class="btn-close btn-close-white float-end" aria-label="Close"></button>
+        </div>
+      </div>
     </div>
-    <div class="mb-3">
-      <label for="lastName" class="form-label">Last Name:</label>
-      <input type="text" id="lastName" [(ngModel)]="editedPerson.lastName" name="lastName" class="form-control" required>
+    <div class="card-body">
+      <form [formGroup]="personForm" (ngSubmit)="onSave()" aria-labelledby="editPersonHeading">
+        <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+        <div class="mb-3">
+          <label for="firstName" class="form-label">First Name:</label>
+          <input type="text" id="firstName" formControlName="firstName" class="form-control" required>
+          <div *ngIf="personForm.get('firstName')?.invalid && personForm.get('firstName')?.touched" class="text-danger">
+            <div *ngIf="personForm.get('firstName')?.hasError('required')">First Name is required.</div>
+            <div *ngIf="personForm.get('firstName')?.hasError('minlength')">First Name must be at least 3 characters long.</div>
+            <div *ngIf="personForm.get('firstName')?.hasError('maxlength')">First Name cannot exceed 50 characters.</div>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="lastName" class="form-label">Last Name:</label>
+          <input type="text" id="lastName" formControlName="lastName" class="form-control" required>
+          <div *ngIf="personForm.get('lastName')?.invalid && personForm.get('lastName')?.touched" class="text-danger">
+            <div *ngIf="personForm.get('lastName')?.hasError('required')">Last Name is required.</div>
+            <div *ngIf="personForm.get('lastName')?.hasError('minlength')">Last Name must be at least 3 characters long.</div>
+            <div *ngIf="personForm.get('lastName')?.hasError('maxlength')">Last Name cannot exceed 50 characters.</div>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="email" class="form-label">Email:</label>
+          <input type="email" id="email" formControlName="email" class="form-control" required>
+          <div *ngIf="personForm.get('email')?.invalid && personForm.get('email')?.touched" class="text-danger">
+            <div *ngIf="personForm.get('email')?.hasError('required')">Email is required.</div>
+            <div *ngIf="personForm.get('email')?.hasError('email')">Valid Email is required.</div>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="department" class="form-label">Department:</label>
+          <select id="department" formControlName="department" class="form-select" required>
+            <option *ngFor="let dept of departments$ | async" [value]="dept.name">{{ dept.name }}</option>
+          </select>
+          <div *ngIf="personForm.get('department')?.invalid && personForm.get('department')?.touched" class="text-danger">
+            Department is required.
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="dateOfBirth" class="form-label">Date of Birth:</label>
+          <input type="date" id="dateOfBirth" formControlName="dateOfBirth" class="form-control" required>
+          <div *ngIf="personForm.get('dateOfBirth')?.invalid && personForm.get('dateOfBirth')?.touched" class="text-danger">
+            <div *ngIf="personForm.get('dateOfBirth')?.hasError('required')">Date of Birth is required.</div>
+            <div *ngIf="personForm.get('dateOfBirth')?.hasError('futureDate')">Date of Birth cannot be in the future.</div>
+            <div *ngIf="personForm.get('dateOfBirth')?.hasError('invalidDate')">Date of Birth must be selected using the Datepicker.</div>
+          </div>
+        </div>
+        <div class="d-flex justify-content-between">
+          <button type="submit" class="btn btn-primary" [disabled]="personForm.invalid">Save</button>
+        </div>
+      </form>
     </div>
-    <div class="mb-3">
-      <label for="email" class="form-label">Email:</label>
-      <input type="email" id="email" [(ngModel)]="editedPerson.email" name="email" class="form-control" required>
-    </div>
-    <div class="mb-3">
-      <label for="department" class="form-label">Department:</label>
-      <select id="department" [(ngModel)]="editedPerson.department" name="department" class="form-select" required>
-        <option *ngFor="let dept of departments$ | async" [value]="dept.name">{{ dept.name }}</option>
-      </select>
-    </div>
-    <div class="mb-3">
-      <label for="dateOfBirth" class="form-label">Date of Birth:</label>
-      <input type="date" id="dateOfBirth" [(ngModel)]="formattedDate" name="dateOfBirth" class="form-control" required>
-    </div>
-    <div>
-      <button type="submit" class="btn btn-primary">Save</button>
-    </div>
-  </form>
+  </div>
 </div>
