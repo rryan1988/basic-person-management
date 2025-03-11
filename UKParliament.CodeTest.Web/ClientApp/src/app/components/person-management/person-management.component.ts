@@ -17,7 +17,7 @@ import { loadDepartments } from 'src/app/store/actions/departments.actions';
 export class PersonManagementComponent implements OnInit {
   people$: Observable<PersonViewModel[]>;
   departments$: Observable<DepartmentViewModel[]>;
-  error$: Observable<any>;
+  error$: Observable<string[]>;
   selectedPerson: PersonViewModel | null = null;
   //showCreatePersonComponent = false;
 
@@ -30,6 +30,7 @@ export class PersonManagementComponent implements OnInit {
   ngOnInit(): void {
     this.store.dispatch(loadPeople());
     this.store.dispatch(loadDepartments());
+    this.error$ = this.store.select(selectPersonError)
   }
 
   onPersonSelected(person: PersonViewModel): void {

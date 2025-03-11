@@ -18,7 +18,7 @@ export class PersonListComponent {
   @Output() showCreatePerson = new EventEmitter<void>();
 
   searchTerm: string = '';
-  private searchTermSubject = new BehaviorSubject<string>('');
+  public searchTermSubject = new BehaviorSubject<string>('');
   searchTerm$ = this.searchTermSubject.asObservable();
   filteredPeople$: Observable<PersonViewModel[]>;
 

@@ -8,24 +8,14 @@ import { DepartmentViewModel } from '../models/department-view-model';
 })
 export class DepartmentService {
   private readonly apiUrl: string;
+  public readonly baseUrl: string;
 
   constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
-    this.apiUrl = `${baseUrl}api/departments`;
+    this.baseUrl = baseUrl;
+    this.apiUrl = `${this.baseUrl}api/departments`;
   }
 
   getDepartments(): Observable<DepartmentViewModel[]> {
     return this.http.get<DepartmentViewModel[]>(this.apiUrl);
-  }
-
-  getDepartmentById(id: number): Observable<DepartmentViewModel> {
-    return this.http.get<DepartmentViewModel>(`${this.apiUrl}/${id}`);
-  }
-
-  createDepartment(department: DepartmentViewModel): Observable<number> {
-    return this.http.post<number>(this.apiUrl, department);
-  }
-
-  updateDepartment(department: DepartmentViewModel): Observable<void> {
-    return this.http.put<void>(`${this.apiUrl}/${department.id}`, department);
   }
 }
