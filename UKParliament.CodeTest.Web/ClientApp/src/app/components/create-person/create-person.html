@@ -1,4 +1,4 @@
-<div class="container mt-4" @fadeInOut>
+<div class="container mt-4" id="create-person-container" @fadeInOut>
   <div class="card">
     <div class="card-header bg-primary text-white">
       <div class="row">
@@ -6,13 +6,19 @@
           <h2 class="text-white" id="createPersonHeading">Create Person</h2>
         </div>
         <div class="col-2">
-          <button type="button" (click)="closeCreatePerson()" class="btn-close btn-close-white float-end" aria-label="Close"></button>
+          <button type="button" [routerLink]="['/']" class="btn-close btn-close-white float-end" aria-label="Close"></button>
         </div>
       </div>
     </div>
     <div class="card-body">
       <form [formGroup]="personForm" (ngSubmit)="onAdd()" aria-labelledby="createPersonHeading">
-      <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+        <div *ngIf="errorMessage | async as errors" class="alert alert-danger" [hidden]="!errors.length">
+          <button type="button" class="btn btn-close-white float-end mt-2" (click)="clearErrors()"></button>
+          <ul>
+            <li *ngFor="let error of errors">{{ error }}</li>
+          </ul>
+        </div>
+      <div *ngIf="showConfirmation" class="alert alert-success">Person successfully created!</div>
         <div class="mb-3">
           <label for="firstName" class="form-label">First Name:</label>
           <input type="text" id="firstName" formControlName="firstName" class="form-control" required>

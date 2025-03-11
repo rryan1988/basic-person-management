@@ -8,5 +8,6 @@ public interface IPersonService
     public Task<Person?> GetPerson(int id);
     public Task<int> CreatePerson(Person person);
     public Task UpdatePerson(Person person);
+    public Task DeletePerson(int id);
 
 }

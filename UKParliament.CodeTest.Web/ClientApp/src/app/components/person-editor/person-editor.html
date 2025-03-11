@@ -1,4 +1,4 @@
-<div *ngIf="editedPerson" class="container mt-4" @fadeInOut>
+<div *ngIf="editedPerson" class="container mt-4" id="person-editor" @fadeInOut>
   <div class="card">
     <div class="card-header bg-primary text-white">
       <div class="row">
@@ -6,13 +6,19 @@
           <h2 class="text-white" id="editPersonHeading">Edit {{editedPerson.firstName}} {{editedPerson.lastName}}</h2>
         </div>
         <div class="col-2">
-          <button type="button" (click)="closeEditor()" class="btn-close btn-close-white float-end" aria-label="Close"></button>
+          <button type="button" [routerLink]="['/']" class="btn-close btn-close-white float-end" aria-label="Close"></button>
         </div>
       </div>
     </div>
     <div class="card-body">
       <form [formGroup]="personForm" (ngSubmit)="onSave()" aria-labelledby="editPersonHeading">
-        <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+        <div *ngIf="errorMessage | async as errors" class="alert alert-danger" [hidden]="!errors.length">
+          <button type="button" class="btn btn-close-white float-end mt-2" (click)="clearErrors()"></button>
+          <ul>
+            <li *ngFor="let error of errors">{{ error }}</li>
+          </ul>
+        </div>
+        <div *ngIf="showConfirmation" class="alert alert-success">{{ showConfirmationText }}</div>
         <div class="mb-3">
           <label for="firstName" class="form-label">First Name:</label>
           <input type="text" id="firstName" formControlName="firstName" class="form-control" required>
@@ -59,8 +65,32 @@
         </div>
         <div class="d-flex justify-content-between">
           <button type="submit" class="btn btn-primary" [disabled]="personForm.invalid">Save</button>
+          <button type="button" (click)="showDeleteConfirmation = true" class="btn btn-danger text-white">Delete</button>
         </div>
       </form>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div *ngIf="showDeleteConfirmation" class="modal fade show d-block" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirm Delete</h5>
+        <button type="button" class="btn-close" (click)="showDeleteConfirmation = false" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete this person? This action cannot be undone.</p>
+        <div class="mb-3">
+          <label for="deleteConfirmation" class="form-label">Type "DELETE" to confirm:</label>
+          <input type="text" id="deleteConfirmation" [(ngModel)]="deleteConfirmation" class="form-control">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary text-white" (click)="showDeleteConfirmation = false">Cancel</button>
+        <button type="button" class="btn btn-danger text-white" [disabled]="deleteConfirmation !== 'DELETE'" (click)="onDelete()">Delete</button>
+      </div>
     </div>
   </div>
 </div>

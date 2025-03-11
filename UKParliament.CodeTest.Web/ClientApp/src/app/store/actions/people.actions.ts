@@ -12,3 +12,7 @@ export const createPersonFailure = createAction('[Person] Create Person Failure'
 export const updatePerson = createAction('[Person] Update Person', props<{ person: PersonViewModel }>());
 export const updatePersonSuccess = createAction('[Person] Update Person Success', props<{ person: PersonViewModel }>());
 export const updatePersonFailure = createAction('[Person] Update Person Failure', props<{ error: any }>());
+
+export const deletePerson = createAction('[People] Delete Person', props<{ id: number }>());
+export const deletePersonSuccess = createAction('[People] Delete Person Success', props<{ id: number }>());
+export const deletePersonFailure = createAction('[People] Delete Person Failure', props<{ error: any }>());

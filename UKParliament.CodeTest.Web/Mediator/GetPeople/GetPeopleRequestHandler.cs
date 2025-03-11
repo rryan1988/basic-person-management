@@ -49,7 +49,8 @@ namespace UKParliament.CodeTest.Web.Mediator.GetPeople
                     FirstName = person.FirstName,
                     LastName = person.LastName,
                     Email = person.Email,
-                    Department = person.Department
+                    Department = person.Department,
+                    DateOfBirth = person.DateOfBirth
                 });
             }
             return peopleViewModel;

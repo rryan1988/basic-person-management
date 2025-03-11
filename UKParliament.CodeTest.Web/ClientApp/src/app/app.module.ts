@@ -20,6 +20,7 @@ import { RouterModule } from '@angular/router';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { AppStateModule } from './store/app.state.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AppRoutingModule } from './app-routing.module';
 
 
 @NgModule({
@@ -42,7 +43,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
       StoreDevtoolsModule.instrument({ maxAge: 25 }),
       RouterModule.forRoot([
           { path: '', component: PersonManagementComponent, pathMatch: 'full' }
-      ])],
+      ]),
+      AppRoutingModule
+    ],
+      
     providers: [
       PersonService, 
       DepartmentService, 

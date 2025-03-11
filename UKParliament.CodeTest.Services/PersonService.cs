@@ -88,4 +88,24 @@ public class PersonService : IPersonService
             throw new InvalidOperationException("An error occurred while updating the person.", ex);
         }
     }
+
+    public async Task DeletePerson(int id)
+    {
+        try
+        {
+            var person = await _context.People.FirstOrDefaultAsync(p => p.Id == id);
+            if (person == null)
+            {
+                throw new InvalidOperationException("Person not found.");
+            }
+
+            _context.People.Remove(person);
+            await _context.SaveChangesAsync();
+        }
+        catch (DbUpdateException ex)
+        {
+            _logger.LogError(ex, "An error occurred while deleting the person.");
+            throw new InvalidOperationException("An error occurred while deleting the person.", ex);
+        }
+    }
 }

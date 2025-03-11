@@ -15,7 +15,8 @@
     </div>
     <!-- Editor/Creator (2/3 width) -->
     <div class="col-md-8">
-      <div *ngIf="selectedPerson">
+      <router-outlet></router-outlet>
+      <!--<div *ngIf="selectedPerson">
         <person-editor [person]="selectedPerson" 
         (savePerson)="onSavePerson($event)" 
         (closeEditorEvent)="closeEditor()"></person-editor>
@@ -23,7 +24,7 @@
       <div *ngIf="showCreatePersonComponent">
         <create-person (addPerson)="onAddPerson($event)" 
         (closeCreatePersonEvent)="closeCreatePerson()"></create-person>
-      </div>
+      </div> -->
     </div>
   </div>
 </div>

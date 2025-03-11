@@ -44,6 +44,15 @@ export class PersonEffects {
     )
   );
 
+  deletePerson$ = createEffect(() => this.actions$.pipe(
+    ofType(PersonActions.deletePerson),
+    mergeMap(action => this.personService.deletePerson(action.id)
+      .pipe(
+        map(() => PersonActions.deletePersonSuccess({ id: action.id })),
+        catchError(error => of(PersonActions.deletePersonFailure({ error })))
+      ))
+  ));
+
   constructor(
     private actions$: Actions,
     private personService: PersonService

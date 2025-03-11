@@ -1,6 +1,6 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { map, Observable, throwError } from 'rxjs';
 import { catchError,switchMap } from 'rxjs';
 import { PersonViewModel } from '../models/person-view-model';
 
@@ -16,14 +16,12 @@ export class PersonService {
 
   getPeople(): Observable<PersonViewModel[]> {
     return this.http.get<PersonViewModel[]>(this.apiUrl).pipe(
-      catchError(this.handleError)
-      );
+      catchError(this.handleError));
   }
 
   getById(id: number): Observable<PersonViewModel> {
     return this.http.get<PersonViewModel>(`${this.apiUrl}/${id}`).pipe(
-      catchError(this.handleError)
-    );
+      catchError(this.handleError));
   }
 
   createPerson(person: PersonViewModel): Observable<PersonViewModel> {
@@ -34,6 +32,12 @@ export class PersonService {
 
   updatePerson(person: PersonViewModel): Observable<void> {
     return this.http.put<void>(this.apiUrl, person).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  deletePerson(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`).pipe(
       catchError(this.handleError)
     );
   }

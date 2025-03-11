@@ -1,12 +1,16 @@
-import { Component, Input, Output, EventEmitter, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, SimpleChanges, input, computed } from '@angular/core';
 import { PersonViewModel } from '../../models/person-view-model';
-import { selectAllDepartments } from 'src/app/store/selectors';
-import { Observable } from 'rxjs';
+import { selectAllDepartments, selectErrors, selectPersonById } from 'src/app/store/selectors';
+import { Observable, switchMap } from 'rxjs';
 import { DepartmentViewModel } from 'src/app/models/department-view-model';
 import { Store } from '@ngrx/store';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { FormGroup } from '@angular/forms';
 import { personFormGroup } from 'src/app/utils/form-helper';
+import { ActivatedRoute, Router } from '@angular/router';
+import { deletePerson, updatePerson } from 'src/app/store/actions/people.actions';
+import { navigateWithAnimation } from 'src/app/utils/animations';
+import { clearErrors } from 'src/app/store/actions/actions';
 
 @Component({
   selector: 'person-editor',
@@ -26,28 +30,39 @@ import { personFormGroup } from 'src/app/utils/form-helper';
     ]
   })
 
-export class PersonEditorComponent implements OnInit {
-  @Input() person: PersonViewModel | null = null;
+export class PersonEditorComponent {
+
   @Output() savePerson = new EventEmitter<PersonViewModel>();
   @Output() closeEditorEvent = new EventEmitter<void>();
+  person: PersonViewModel | undefined;
   departments$: Observable<DepartmentViewModel[]>;
   editedPerson: PersonViewModel | null = null;
   formattedDate: string | null = null;
-  errorMessage: string | null = null;
+  errorMessage: Observable<string[]> | null = null;
+  showConfirmation: boolean = false;
+  showConfirmationText: string = '';
   personForm: FormGroup
+  showDeleteConfirmation: boolean = false;
+  deleteConfirmation: string = '';
+  deleteConfirmationText = 'I Understand';
+  enableDelete = computed(() => this.deleteConfirmation == this.deleteConfirmationText)
 
-  constructor(private store: Store) {
+  constructor(private store: Store, private route: ActivatedRoute, private router: Router) {
+
     this.departments$ = this.store.select(selectAllDepartments);
+    this.errorMessage = this.store.select(selectErrors);
     this.personForm = personFormGroup();
+    this.route.paramMap.pipe(
+      switchMap(params => {
+        const id = +params.get('id')!;
+        return this.store.select(selectPersonById(id));
+      })
+    ).subscribe(person => {
+      this.person = person;
+      this.updatePerson();
+    });
   }
 
-  ngOnInit(): void {
-    if (this.person) {
-      // Clone the person object
-      this.updatePerson();
-      
-    }
-  }
   formatDate(date: Date | string): string {
     const d = new Date(date);
     const month = ('0' + (d.getMonth() + 1)).slice(-2);
@@ -56,32 +71,73 @@ export class PersonEditorComponent implements OnInit {
     return `${year}-${month}-${day}`;
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes.person) {
-      this.updatePerson();
-    }
-  }
+  //ngOnChanges(changes: SimpleChanges): void {
+    //if (changes.person) {
+      //this.updatePerson();
+    //}
+  //}
 
   updatePerson(): void {
     if (this.person) {
-      // Clone the person object
       this.editedPerson = { ...this.person };
       this.formattedDate = this.formatDate(this.editedPerson.dateOfBirth);
+      this.editedPerson.dateOfBirth = this.formattedDate;
       this.personForm.patchValue(this.editedPerson);
-      this.personForm.get('dateOfBirth')?.patchValue(this.formattedDate);
+      //this.personForm.get('dateOfBirth')?.patchValue(this.formattedDate);
     }
+  }
+
+  clearErrors(): void {
+    this.store.dispatch(clearErrors());
+  }
+
+
+  updatePersonFromForm() : void {
+    this.editedPerson = {
+      id: this.person!.id,
+      firstName: this.personForm.value.firstName,
+      lastName: this.personForm.value.lastName,
+      email: this.personForm.value.email,
+      department: this.personForm.value.department,
+      dateOfBirth: this.formatDate(this.personForm.value.dateOfBirth)
+    };
+  }
+
+  onShowDeleteConfirmation(){
+    this.showDeleteConfirmation = true;
   }
 
   onSave(): void {
     if (this.editedPerson) {
-      this.formattedDate = this.formatDate(this.personForm.value.dateOfBirth);
-      this.editedPerson.dateOfBirth = new Date(this.formattedDate || '');
-      console.log("saving", this.editedPerson)
-      this.savePerson.emit(this.editedPerson);
+      this.updatePersonFromForm();
+      this.store.dispatch(updatePerson({ person: this.editedPerson }));
+      this.errorMessage?.subscribe(errors => {
+        if (errors.length < 1) {
+          this.showConfirmationText = this.editedPerson?.firstName + ' was successfully updated!';
+          this.showConfirmation = true;
+          setTimeout(() => {
+            this.showConfirmation = false;
+            this.showConfirmationText = '';
+          }, 3000) // Hide confirmation message after 3 seconds
+        }
+      });
+
+    }
+  }
+
+  onDelete(): void {
+    if (this.editedPerson) {
+      this.showDeleteConfirmation = false;
+      this.store.dispatch(deletePerson({ id: this.editedPerson.id! }));
+      this.showConfirmationText = "Person Deleted successfully";
+      this.showConfirmation = true;
+      this.closeEditor();
     }
   }
 
   closeEditor(): void {
-    this.closeEditorEvent.emit();
+    setTimeout(() => {
+      navigateWithAnimation('/', '#person-editor', this.router, 300);
+    }, 3000) // Hide confirmation message after 3 seconds
   }
 }
