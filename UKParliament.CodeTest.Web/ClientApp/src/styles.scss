@@ -1,4 +1,21 @@
 /* You can add global styles to this file, and also import other style files */
+// Import Bootstrap functions
+@import 'bootstrap/scss/functions';
+
+// Override Bootstrap variables
+$theme-colors: (
+  "primary": #373151, // Custom primary color
+  "secondary": #2b57ab, // Custom secondary color
+  "success": #8BC34A,
+  "info": #96dcbe,
+  "warning": #FFC107,
+  "danger": #F44336,
+  "light": #4d4d4d,
+  "dark": #212121
+);
+
+// Import Bootstrap to apply the custom theme
+@import 'bootstrap/scss/bootstrap';
 
 $colour-purple: #373151;
 

@@ -1,0 +1,14 @@
+.list-group-item {
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  
+    &:hover {
+      background-color: #f8f9fa;
+    }
+  }
+
+  .list-group-item.active {
+    background-color: #96dcbe; /* Custom background color */
+    border-color: #96dcbe; /* Custom border color */
+    color: black; /* Custom text color */
+  }

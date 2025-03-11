@@ -1,6 +1,10 @@
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 using UKParliament.CodeTest.Data;
 using UKParliament.CodeTest.Services;
+using UKParliament.CodeTest.Web.Helpers;
 
 namespace UKParliament.CodeTest.Web;
 
@@ -16,7 +20,13 @@ public class Program
 
         builder.Services.AddDbContext<PersonManagerContext>(op => op.UseInMemoryDatabase("PersonManager"));
 
+        builder.Services.AddScoped<DbContext>(provider => provider.GetRequiredService<PersonManagerContext>());
+
         builder.Services.AddScoped<IPersonService, PersonService>();
+
+        builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+
+        builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 
         var app = builder.Build();
 

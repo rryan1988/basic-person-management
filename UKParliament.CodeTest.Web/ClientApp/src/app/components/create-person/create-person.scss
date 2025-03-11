@@ -1,0 +1,14 @@
+.container {
+    &.fade-out {
+      animation: fadeOut 300ms ease-out forwards;
+    }
+  }
+  
+  @keyframes fadeOut {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
