@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map, Observable, throwError } from 'rxjs';
-import { catchError,switchMap } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs';
 import { PersonViewModel } from '../models/person-view-model';
 
 @Injectable({
